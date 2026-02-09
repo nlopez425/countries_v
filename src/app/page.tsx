@@ -1,5 +1,6 @@
 "use client";
 import useDataFetching from "../hooks/dataFetching/useDataFetching";
+import UseDebounce from "@/hooks/useDebounce";
 import Counttry from "../components/counttry";
 import { Country, useGlobalContext } from "@/context/globalContext";
 import Search from "@/components/search";
@@ -20,8 +21,10 @@ export default function Home() {
     }
   }, [data, setCountries]);
 
-  const displayedCountries = searchTerm 
-  ? countries.filter(c => c.name.common.toLowerCase().includes(searchTerm.toLowerCase()))
+  const debouncedSearchTerm = UseDebounce(searchTerm, 500);
+
+  const displayedCountries = debouncedSearchTerm 
+  ? countries.filter(c => c.name.common.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
   : countries;
 
   if (loading) return <div className="p-5 pulse">Loading...</div>;
